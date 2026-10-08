@@ -1,0 +1,29 @@
+# Node and build output
+node_modules/
+dist/
+target/
+*.tsbuildinfo
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+.secrets/
+secrets/
+*.secret
+*.key
+*.pem
+*.p12
+
+# Logs
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/*.code-workspace
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
