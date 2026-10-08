@@ -36,3 +36,9 @@ npm audit
 ```
 
 Vite writes generated output to `dist/`, which is excluded from Git.
+
+## Render Static Site
+
+Create a Static Site using this repository's root. Set the build command to `npm install && npm run build`, the publish directory to `dist`, and add `VITE_API_URL` as a build environment variable containing the backend's public base URL. Do not add credentials to frontend environment variables.
+
+The application has no React Router or URL-based pages; its signed-in views are managed in component state. No SPA rewrite rule is required for the current routes. If URL-based routes are introduced later, configure a Render rewrite to serve `/index.html` for those application paths.

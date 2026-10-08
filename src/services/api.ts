@@ -1,4 +1,4 @@
-const API_BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/+$/, '');
+const API_BASE = (import.meta.env.VITE_API_URL ?? '').trim().replace(/\/+$/, '');
 
 export type Account = {
   id: number;
@@ -61,9 +61,17 @@ async function request<T>(path: string, options: RequestInit = {}, credentials?:
   headers.set('Content-Type', 'application/json');
   if (credentials) headers.set('Authorization', authorization(credentials.email, credentials.password));
 
-  const response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  } catch {
+    throw new Error('Unable to connect to SkillGap AI. Check your connection and try again.');
+  }
   if (!response.ok) {
     const body = await response.json().catch(() => null) as { detail?: string; message?: string } | null;
+    if (response.status >= 500) {
+      throw new Error('Something went wrong on the server. Please try again.');
+    }
     throw new Error(body?.detail ?? body?.message ?? (response.status === 401 ? 'Email or password is incorrect.' : `Request failed (${response.status}).`));
   }
   if (response.status === 204) return undefined as T;
